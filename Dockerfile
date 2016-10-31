@@ -24,7 +24,7 @@ WORKDIR /app
 VOLUME /var/run/transparent-proxy
 
 # Nodejs official package from alpine installation
-RUN apk add --update git nodejs
+RUN apk add --update git python nodejs
 
 # ADD local files to application folder
 ADD . /app
