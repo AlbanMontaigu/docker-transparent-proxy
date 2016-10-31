@@ -3,7 +3,7 @@
 # Error handling
 set -e
 
-# stop and delete existing container
+# Stop and delete existing container
 echo "[INFO] Deleting existing transparent proxy container and network rules ..."
 docker rm -f transparent-proxy 2>/dev/null || true
 
