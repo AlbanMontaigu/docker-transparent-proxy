@@ -1,14 +1,14 @@
 #!/bin/sh
 
-echo "Killing transparent-proxy container"
+# Error handling
+set -e
 
-if docker --version |grep 1.8.; then
-  OPTIONS=""
-else
-  OPTIONS="-m addrtype --dst-type UNICAST ! --dst 172.0.0.0/8"
-fi
+# Stop and delete existing container
+echo "[INFO] Deleting existing transparent proxy container..."
+docker rm -f transparent-proxy 2>/dev/null || true
 
-# Finally we tell iptables to use the ‘TRANSPROXY’ chain for all outgoing connection in the network interface ‘eth0′.
-sudo iptables -t nat -D PREROUTING -i docker0 -p tcp -j TRANSPROXY $OPTIONS
+echo "[INFO] Restoring network rules..."
+sudo iptables-save | grep -v TRANSPROXY | sudo iptables-restore
 
-docker rm -f transparent-proxy >/dev/null 2>&1
+# End of error handling
+set +e
