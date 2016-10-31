@@ -11,5 +11,6 @@ It means that when you use this proxy:
 
 ## Credits
 
-- Thanks to **Romain Philibert** from the initial version I reuse for this project
+- Thanks to **Romain** from the initial version I reuse for this project
 - Thanks to **tootallnate** to profile the [pac-proxy-agent](https://www.npmjs.com/package/pac-proxy-agent) package for node that is beeing used in this transparent proxy
+- Thanks to **Loic** and **Thomas** for their specific integration model in boot2docker
