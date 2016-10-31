@@ -27,7 +27,7 @@ VOLUME /var/run/transparent-proxy
 RUN apk add --update gcc g++ git python make nodejs
 
 # ADD local files to application folder
-ADD . /app
+ADD ./app /app
 
 # Runs npm post install
 RUN npm i --production \
