@@ -1,0 +1,14 @@
+#!/bin/sh
+
+echo "Killing transparent-proxy container"
+
+if docker --version |grep 1.8.; then
+  OPTIONS=""
+else
+  OPTIONS="-m addrtype --dst-type UNICAST ! --dst 172.0.0.0/8"
+fi
+
+# Finally we tell iptables to use the ‘TRANSPROXY’ chain for all outgoing connection in the network interface ‘eth0′.
+sudo iptables -t nat -D PREROUTING -i docker0 -p tcp -j TRANSPROXY $OPTIONS
+
+docker rm -f transparent-proxy >/dev/null 2>&1
