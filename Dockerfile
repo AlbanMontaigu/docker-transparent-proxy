@@ -11,7 +11,7 @@
 # ==================================================================================================
 
 # Base image, small node image on the top of alpine
-FROM mhart/alpine-node:4
+FROM centos:7
 
 # Maintainer
 MAINTAINER Alban Montaigu <https://github.com/AlbanMontaigu>
@@ -23,12 +23,15 @@ WORKDIR /app
 VOLUME /var/run/transparent-proxy
 
 # For node native dependencies, need extra tools
-RUN apk add --no-cache git make gcc g++ python
+RUN yum install -y python git make gcc gcc-c++ \
+  && curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - \
+  && yum clean all \
+  && rm -rf /tmp/*
 
 # ADD local files to application folder
 ADD ./app /app
 
-# App context installation
+# App installation
 RUN npm install --production \
   && rm -fr ~/.npm \
   && rm -fr /tmp/*
