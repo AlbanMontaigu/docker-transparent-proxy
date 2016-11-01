@@ -4,10 +4,6 @@
 #
 # A transparent proxy for your docker containers with dynamic proxy switch depending your urls / ip
 #
-# @see https://pkgs.alpinelinux.org
-# @see http://wiki.alpinelinux.org/wiki/Alpine_Linux_package_management
-# @see https://github.com/buildkite/docker-buildkite-agent/blob/master/alpine/Dockerfile
-#
 # ==================================================================================================
 
 # Base image, small node image on the top of alpine
