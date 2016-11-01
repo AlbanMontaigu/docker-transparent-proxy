@@ -10,9 +10,8 @@
 #
 # ==================================================================================================
 
-# Base image
-# 3.4 last version as per 2016-10-31
-FROM alpine:3.4
+# Base image, small node image on the top of alpine
+FROM mhart/alpine-node:7
 
 # Maintainer
 MAINTAINER Alban Montaigu <https://github.com/AlbanMontaigu>
@@ -22,9 +21,6 @@ WORKDIR /app
 
 # Transparent proxy volume data
 VOLUME /var/run/transparent-proxy
-
-# Nodejs official package from alpine installation
-RUN apk add --update gcc g++ git python make nodejs
 
 # ADD local files to application folder
 ADD ./app /app
