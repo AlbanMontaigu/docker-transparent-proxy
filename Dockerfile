@@ -23,8 +23,8 @@ WORKDIR /app
 VOLUME /var/run/transparent-proxy
 
 # For node native dependencies, need extra tools
-RUN yum install -y python git make gcc gcc-c++ \
-  && curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - \
+RUN curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - \
+  && yum install -y python git make gcc gcc-c++ nodejs \
   && yum clean all \
   && rm -rf /tmp/*
 
