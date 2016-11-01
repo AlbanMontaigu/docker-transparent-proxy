@@ -22,17 +22,15 @@ WORKDIR /app
 # Transparent proxy volume data
 VOLUME /var/run/transparent-proxy
 
-# For node native dependencies, need extra tools
-RUN curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - \
-  && yum install -y git gcc-c++ make nodejs \
-  && yum clean all \
-  && rm -rf /tmp/*
-
 # ADD local files to application folder
 ADD ./app /app
 
-# App installation
-RUN npm install --production \
+# For node native dependencies, need extra tools
+RUN curl --silent --location https://rpm.nodesource.com/setup_4.x | bash - \
+  && yum install -y git gcc-c++ make nodejs \
+  && npm install --production \
+  && yum remove -y git gcc-c++ make \
+  && yum clean all \
   && rm -fr ~/.npm \
   && rm -fr /tmp/*
 
