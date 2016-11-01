@@ -23,7 +23,7 @@ WORKDIR /app
 VOLUME /var/run/transparent-proxy
 
 # For node native dependencies, need extra tools
-RUN apk add --no-cache make gcc g++ python
+RUN apk add --no-cache git make gcc g++ python
 
 # ADD local files to application folder
 ADD ./app /app
