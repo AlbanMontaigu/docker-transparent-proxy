@@ -11,7 +11,7 @@
 # ==================================================================================================
 
 # Base image, small node image on the top of alpine
-FROM mhart/alpine-node:7
+FROM mhart/alpine-node:4
 
 # Maintainer
 MAINTAINER Alban Montaigu <https://github.com/AlbanMontaigu>
@@ -22,14 +22,14 @@ WORKDIR /app
 # Transparent proxy volume data
 VOLUME /var/run/transparent-proxy
 
-# Nodejs official package from alpine installation
-RUN apk add --update gcc g++ git python make
+# For node native dependencies, need extra tools
+RUN apk add --no-cache make gcc g++ python
 
 # ADD local files to application folder
 ADD ./app /app
 
-# Runs npm post install
-RUN npm i --production \
+# App context installation
+RUN npm install --production \
   && rm -fr ~/.npm \
   && rm -fr /tmp/*
 
