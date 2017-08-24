@@ -37,7 +37,7 @@ jobs:
             mkdir -p /caches
             docker save -o /caches/docker_app_image.tar $DOCKER_APP_IMAGE_NAME
       - save_cache:
-          key: cache-{{ .Environment.CIRCLE_PROJECT_REPONAME }}
+          key: cache-{{ .Environment.CIRCLE_PROJECT_REPONAME }}-{{ epoch }}
           paths:
             - /caches/docker_app_image.tar
 
