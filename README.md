@@ -1,4 +1,4 @@
-# docker-transparent-proxy
+# docker-transparent-proxy [![Circle CI](https://circleci.com/gh/AlbanMontaigu/docker-transparent-proxy.svg?style=shield)](https://circleci.com/gh/AlbanMontaigu/docker-transparent-proxy)
 
 ## Purpose
 
