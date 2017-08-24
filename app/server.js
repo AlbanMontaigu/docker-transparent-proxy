@@ -37,6 +37,7 @@ function onconnection(socket) {
   // transparent proxy
   agentTunnel.callback(server, {host: host, port: port}, function(err, target){
     if(err) return console.log(err)
+    socket.on('error', function(err){console.log(err)})
     target.pipe(socket)
     socket.pipe(target)
   });

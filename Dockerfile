@@ -9,9 +9,6 @@
 # Base image, small node image on the top of alpine
 FROM centos:7
 
-# Maintainer
-MAINTAINER Alban Montaigu <https://github.com/AlbanMontaigu>
-
 # Current directory configuration
 WORKDIR /app
 

@@ -6,7 +6,7 @@ clusterMaster({
   size: require('os').cpus().length,
   env: process.env,
   args: process.argv.splice(2),
-  silent: true,
+  silent: false,
   signals: true,
   repl: '/var/run/transparent-proxy/cluster-master.socket'
 })
