@@ -14,3 +14,9 @@
 	result="$(docker run ${DOCKER_APP_IMAGE_NAME} node --version)"
 	[[ "$result" == *"v"* ]]
 }
+
+# Test app version available
+@test "App version is available" {
+	result="$(docker run ${DOCKER_APP_IMAGE_NAME} node -e \"console.log(require('./package.json').version);\")"
+	[[ "$result" == *"0.1.1"* ]]
+}
