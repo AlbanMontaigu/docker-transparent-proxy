@@ -1,0 +1,137 @@
+version: 2
+
+# =======================================================================
+# JOBS definition
+# =======================================================================
+jobs:
+
+# --------------------------------------------
+# JOB: build docker application image
+# --------------------------------------------
+  build:
+    working_directory: /app
+    docker:
+      - image: docker:17.06.1-ce-git
+        environment:
+          DOCKER_APP_IMAGE_NAME: amontaigu/transparent-proxy
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/docker_app_image.tar
+      - run:
+          name: Load docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/docker_app_image.tar | true
+      - run:
+          name: Build docker image
+          command: |
+            docker build --cache-from=$DOCKER_APP_IMAGE_NAME --tag $DOCKER_APP_IMAGE_NAME .
+      - run:
+          name: Save docker image layer cache
+          command: |
+            mkdir -p /caches
+            docker save -o /caches/docker_app_image.tar $DOCKER_APP_IMAGE_NAME
+      - save_cache:
+          key: v1-{{ .Branch }}-{{ epoch }}
+          paths:
+            - /caches/docker_app_image.tar
+
+# --------------------------------------------
+# JOB: test docker application image
+# --------------------------------------------
+  test:
+    working_directory: /app
+    docker:
+      - image: docker:17.06.1-ce-git
+        environment:
+          DOCKER_APP_IMAGE_NAME: amontaigu/terraform
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/docker_app_image.tar
+      - run:
+          name: Load docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/docker_app_image.tar | true
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache \
+              bats
+      - run:
+          name: Run tests
+          command: |
+            bats tests
+
+# --------------------------------------------
+# JOB: deploy docker application image
+# --------------------------------------------
+  deploy:
+    working_directory: /app
+    docker:
+      - image: docker:17.06.1-ce-git
+        environment:
+          DOCKER_APP_IMAGE_NAME: amontaigu/terraform
+    steps:
+      - checkout
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - v1-{{ .Branch }}
+          paths:
+            - /caches/docker_app_image.tar
+      - run:
+          name: Load docker image layer cache
+          command: |
+            set +o pipefail
+            docker load -i /caches/docker_app_image.tar | true
+      - deploy:
+          name: Push image to docker hub
+          command: |
+            if [ -n "${CIRCLE_TAG}" ]; then
+              docker login -u $DOCKER_USER -p $DOCKER_PASS
+              docker tag $DOCKER_APP_IMAGE_NAME $DOCKER_APP_IMAGE_NAME:$CIRCLE_TAG
+              docker push $DOCKER_APP_IMAGE_NAME:$CIRCLE_TAG
+            fi
+
+
+# =======================================================================
+# WORKFLOWS definition
+# =======================================================================
+workflows:
+  version: 2
+  build-test-deploy:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - test:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              only: /.*/
+      - deploy:
+          requires:
+            - build
+            - test
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
