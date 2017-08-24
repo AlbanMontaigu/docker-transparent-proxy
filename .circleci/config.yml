@@ -49,7 +49,7 @@ jobs:
     docker:
       - image: docker:17.06.1-ce-git
         environment:
-          DOCKER_APP_IMAGE_NAME: amontaigu/terraform
+          DOCKER_APP_IMAGE_NAME: amontaigu/transparent-proxy
     steps:
       - checkout
       - setup_remote_docker
@@ -81,7 +81,7 @@ jobs:
     docker:
       - image: docker:17.06.1-ce-git
         environment:
-          DOCKER_APP_IMAGE_NAME: amontaigu/terraform
+          DOCKER_APP_IMAGE_NAME: amontaigu/transparent-proxy
     steps:
       - checkout
       - setup_remote_docker
